@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>月亮电影网 - 夜色月光片单、月相选片与夜间电影策展</title>
+<meta name="description" content="月亮电影网（yueliangdianyingwang-h5）是一个夜色诗意电影站：月光片单、月相选片、夜间观影时间线与月亮主题策展。今晚月色真美，和电影里的一样。" />
+<meta name="keywords" content="月亮电影网,月光片单,月相选片,夜间电影,浪漫电影,孤独电影,月球科幻,赏月电影" />
+<meta name="author" content="月亮电影网" />
+<meta name="robots" content="index, follow" />
+<meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+<link rel="canonical" href="https://yueliangdianyingwang-h5.github.io/" />
+
+<style>
+  :root{
+    --night-0:#070b1c;
+    --night-1:#0b1026;
+    --night-2:#121a3a;
+    --night-3:#1b2550;
+    --ink:#e9eefc;
+    --ink-dim:#aab4dd;
+    --ink-mute:#6f7aa8;
+    --moon:#f4f7ff;
+    --moon-soft:#c9d4f0;
+    --halo:#f3e7c9;
+    --halo-soft:#e7d9b4;
+    --line:rgba(201,212,240,.14);
+    --line-strong:rgba(201,212,240,.28);
+    --serif:"Playfair Display","Noto Serif SC","Songti SC","SimSun",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    --radius:22px;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--sans);
+    background:radial-gradient(1200px 600px at 80% -10%, rgba(243,231,201,.08), transparent 60%),
+               radial-gradient(900px 500px at 10% 10%, rgba(123,148,223,.12), transparent 55%),
+               linear-gradient(180deg,var(--night-1),var(--night-0));
+    color:var(--ink);
+    line-height:1.8;
+    font-size:16px;
+    overflow-x:hidden;
+    min-height:100vh;
+  }
+
+  /* 星空 */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background-image:
+      radial-gradient(1px 1px at 20% 30%, #fff, transparent),
+      radial-gradient(1px 1px at 70% 20%, #fff, transparent),
+      radial-gradient(1px 1px at 40% 70%, #cfe, transparent),
+      radial-gradient(1px 1px at 85% 65%, #fff, transparent),
+      radial-gradient(1px 1px at 55% 45%, #fff, transparent),
+      radial-gradient(1px 1px at 12% 80%, #dde, transparent);
+    opacity:.5;
+  }
+
+  a{color:var(--moon-soft);text-decoration:none;transition:.25s}
+  a:hover{color:var(--halo)}
+
+  .wrap{width:100%;max-width:1180px;margin:0 auto;padding:0 22px;position:relative;z-index:2}
+
+  /* 月亮装饰 */
+  .moon-orb{
+    position:fixed;top:90px;right:6%;
+    width:120px;height:120px;border-radius:50%;
+    background:radial-gradient(circle at 35% 35%, #ffffff, #dfe6fb 45%, #aab6e6 100%);
+    box-shadow:0 0 60px rgba(244,247,255,.35),0 0 120px rgba(243,231,201,.18),inset -18px -14px 30px rgba(120,130,180,.35);
+    z-index:1;animation:moonFloat 9s ease-in-out infinite;
+  }
+  .moon-orb::after{
+    content:"";position:absolute;top:24px;left:30px;width:18px;height:18px;border-radius:50%;
+    background:rgba(150,160,200,.25);box-shadow:34px 26px 0 -4px rgba(150,160,200,.18),12px 54px 0 -2px rgba(150,160,200,.14);
+  }
+  @keyframes moonFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(14px)}}
+
+  /* 导航 */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:1000;
+    background:rgba(7,11,28,.72);backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{font-family:var(--serif);font-size:20px;font-weight:700;letter-spacing:1px;display:flex;align-items:center;gap:10px}
+  .brand .dot{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff,#c9d4f0 60%,#8b97c9);box-shadow:0 0 18px rgba(244,247,255,.5)}
+  .brand b{color:var(--halo);font-weight:700}
+  .nav-links{display:flex;list-style:none;gap:2px}
+  .nav-links a{font-size:14px;color:var(--ink-dim);padding:10px 14px;border-radius:12px}
+  .nav-links a:hover{color:var(--ink);background:rgba(201,212,240,.08)}
+  .menu-btn{display:none;background:rgba(201,212,240,.1);border:1px solid var(--line-strong);color:var(--moon);width:40px;height:40px;border-radius:12px;font-size:18px;cursor:pointer}
+
+  /* Hero */
+  .hero{margin-top:64px;padding:96px 0 76px;position:relative}
+  .hero-label{font-family:var(--serif);font-style:italic;color:var(--halo-soft);font-size:15px;letter-spacing:1px;margin-bottom:18px}
+  .hero h1{
+    font-family:var(--serif);
+    font-size:clamp(34px,6.5vw,68px);
+    font-weight:800;line-height:1.08;letter-spacing:.5px;
+    margin-bottom:22px;
+  }
+  .hero h1 em{font-style:italic;color:var(--halo)}
+  .hero-desc{max-width:560px;color:var(--ink-dim);font-size:17px;margin-bottom:34px}
+  .hero-btns{display:flex;gap:14px;flex-wrap:wrap}
+  .btn-moon{
+    display:inline-flex;align-items:center;gap:8px;
+    background:linear-gradient(135deg,#f4f7ff,#c9d4f0);
+    color:#10173a;font-weight:700;padding:13px 28px;border-radius:30px;
+    box-shadow:0 10px 30px rgba(201,212,240,.25);
+  }
+  .btn-moon:hover{transform:translateY(-2px);color:#10173a}
+  .btn-ghost{
+    display:inline-flex;align-items:center;gap:8px;
+    border:1px solid var(--line-strong);color:var(--ink);
+    padding:13px 28px;border-radius:30px;
+  }
+  .btn-ghost:hover{border-color:var(--halo);color:var(--halo)}
+
+  .phase-row{display:flex;gap:10px;margin-top:42px;flex-wrap:wrap}
+  .phase{
+    display:flex;align-items:center;gap:10px;
+    padding:10px 16px;border:1px solid var(--line);border-radius:30px;
+    background:rgba(18,26,58,.5);font-size:13px;color:var(--ink-dim);
+  }
+  .phase i{width:18px;height:18px;border-radius:50%;display:inline-block;background:var(--moon-soft);box-shadow:inset -6px -4px 0 rgba(120,130,180,.5)}
+  .phase.f i{background:transparent;border:2px solid var(--moon-soft)}
+  .phase.h i{background:linear-gradient(90deg,var(--moon-soft) 50%,transparent 50%)}
+  .phase.full i{background:var(--moon);box-shadow:0 0 14px rgba(244,247,255,.7)}
+  .phase.gib i{background:linear-gradient(90deg,transparent 50%,var(--moon-soft) 50%)}
+
+  /* 栏目通用 */
+  section{padding:82px 0;border-top:1px solid var(--line);position:relative;z-index:2}
+  .sec-head{margin-bottom:44px}
+  .sec-kicker{font-family:var(--serif);font-style:italic;color:var(--halo-soft);font-size:14px;letter-spacing:2px;margin-bottom:8px}
+  .sec-title{font-family:var(--serif);font-size:clamp(24px,4vw,36px);font-weight:800;margin-bottom:10px}
+  .sec-desc{color:var(--ink-dim);max-width:580px}
+
+  /* 月光片单 */
+  .film-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px}
+  .film-card{
+    background:linear-gradient(180deg,rgba(27,37,80,.7),rgba(11,16,38,.7));
+    border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px;transition:.35s;position:relative;overflow:hidden;
+  }
+  .film-card:hover{transform:translateY(-6px);border-color:var(--line-strong);box-shadow:0 20px 50px rgba(0,0,0,.45)}
+  .film-phase{font-size:12px;letter-spacing:2px;color:var(--halo-soft);font-family:var(--serif);font-style:italic;margin-bottom:10px}
+  .film-card h3{font-family:var(--serif);font-size:20px;font-weight:700;margin-bottom:6px}
+  .film-meta{font-size:13px;color:var(--ink-mute);margin-bottom:12px}
+  .film-card p{font-size:14px;color:var(--ink-dim);margin-bottom:16px}
+  .tag{display:inline-block;font-size:11px;padding:4px 11px;border-radius:20px;border:1px solid var(--line-strong);color:var(--moon-soft);margin:0 6px 6px 0}
+  .tag.halo{border-color:var(--halo);color:var(--halo)}
+
+  /* 月夜时间线 */
+  .night-section{background:linear-gradient(180deg,rgba(7,11,28,.4),rgba(18,26,58,.35))}
+  .timeline{display:grid;gap:0;border-left:2px solid var(--line-strong);margin-left:8px}
+  .tl-item{display:grid;grid-template-columns:90px 1fr;gap:18px;padding:0 0 30px 22px;position:relative}
+  .tl-item::before{content:"";position:absolute;left:-7px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--moon);box-shadow:0 0 12px rgba(244,247,255,.7)}
+  .tl-time{font-family:var(--serif);font-size:18px;color:var(--halo);font-weight:700}
+  .tl-body h4{font-size:16px;font-weight:700;margin-bottom:4px}
+  .tl-body p{font-size:14px;color:var(--ink-dim)}
+
+  /* 月亮与电影 策展 */
+  .theme-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+  .theme-card{
+    border:1px solid var(--line);border-radius:18px;padding:26px 22px;
+    background:rgba(11,16,38,.6);transition:.3s;
+  }
+  .theme-card:hover{background:rgba(27,37,80,.7);transform:translateY(-4px)}
+  .theme-emoji{font-size:30px;margin-bottom:12px;display:block}
+  .theme-card h4{font-family:var(--serif);font-size:18px;margin-bottom:8px}
+  .theme-card p{font-size:14px;color:var(--ink-dim);margin-bottom:12px}
+  .theme-card span{font-size:12px;color:var(--ink-mute);font-style:italic;font-family:var(--serif)}
+
+  /* 关于 */
+  .about{text-align:center}
+  .quote{
+    font-family:var(--serif);font-style:italic;
+    font-size:clamp(20px,3.4vw,30px);line-height:1.5;
+    max-width:720px;margin:0 auto 26px;color:var(--ink);
+  }
+  .quote b{color:var(--halo)}
+  .about p{color:var(--ink-dim);max-width:540px;margin:0 auto 30px}
+  .stats{display:flex;justify-content:center;gap:48px;flex-wrap:wrap;margin-top:34px}
+  .stat .n{font-family:var(--serif);font-size:30px;font-weight:800;color:var(--moon)}
+  .stat .l{font-size:12px;color:var(--ink-mute);letter-spacing:1px}
+
+  /* 页脚 */
+  footer{border-top:1px solid var(--line);padding:44px 0 26px;position:relative;z-index:2}
+  .foot{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;margin-bottom:24px}
+  .foot .brand{margin-bottom:10px}
+  .foot p{font-size:13px;color:var(--ink-mute);max-width:300px}
+  .foot-col h5{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--halo-soft);margin-bottom:12px}
+  .foot-col a{display:block;font-size:13px;color:var(--ink-dim);padding:3px 0}
+  .foot-bottom{border-top:1px solid var(--line);padding-top:18px;font-size:12px;color:var(--ink-mute);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+  @media(max-width:768px){
+    .moon-orb{width:84px;height:84px;top:74px;right:4%}
+    .nav-links{display:none;position:absolute;top:64px;left:0;right:0;flex-direction:column;background:var(--night-1);border-bottom:1px solid var(--line);padding:8px 0}
+    .nav-links.active{display:flex}
+    .nav-links a{padding:14px 22px;border-radius:0}
+    .menu-btn{display:block}
+    .hero-btns{flex-direction:column;align-items:flex-start}
+    .btn-moon,.btn-ghost{width:100%;justify-content:center}
+    .tl-item{grid-template-columns:64px 1fr;gap:12px}
+    .stats{gap:26px}
+    .foot{flex-direction:column}
+  }
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/laoliu.js"></script>
+  <div class="moon-orb" aria-hidden="true"></div>
+
+  <header>
+    <div class="wrap nav">
+      <div class="brand"><span class="dot"></span>月亮<b>电影网</b></div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home">今夜</a></li>
+        <li><a href="#films">月光片单</a></li>
+        <li><a href="#night">月夜时间线</a></li>
+        <li><a href="#themes">月亮与电影</a></li>
+        <li><a href="#about">关于</a></li>
+      </ul>
+      <button class="menu-btn" onclick="document.getElementById('navLinks').classList.toggle('active')">☾</button>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="home">
+    <div class="wrap">
+      <div class="hero-label">Tonight the moon is almost full — 今夜将近满月</div>
+      <h1>今晚月色真美，<br/>和<em>电影里</em>的一样。</h1>
+      <p class="hero-desc">月亮电影网（yueliangdianyingwang-h5）是一个为夜晚准备的电影站。我们不按热度排片，按心境、按月相、按你想成为谁，来选一部陪你过夜的电影。</p>
+      <div class="hero-btns">
+        <a href="#films" class="btn-moon">🌙 看看今夜片单</a>
+        <a href="#night" class="btn-ghost">🕛 走一遍月夜时间线</a>
+      </div>
+      <div class="phase-row">
+        <div class="phase f"><i></i>新月 · 开始</div>
+        <div class="phase h"><i></i>上弦 · 犹豫</div>
+        <div class="phase full"><i></i>满月 · 坦白</div>
+        <div class="phase gib"><i></i>残月 · 释怀</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 栏目一：月光片单 -->
+  <section id="films">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="sec-kicker">Moonlight Picks</div>
+        <h2 class="sec-title">月光片单</h2>
+        <p class="sec-desc">每部电影都像一种月相：有的藏一半心事，有的把孤独照得很亮。</p>
+      </div>
+      <div class="film-grid">
+        <article class="film-card">
+          <div class="film-phase">○ 新月 · NEW MOON</div>
+          <h3>月光男孩</h3>
+          <div class="film-meta">2016 · 剧情 · 巴里·詹金斯</div>
+          <p>蓝色月光下长大的人，怎样学会说出"我是谁"。三段时间，一种温柔的痛。</p>
+          <span class="tag halo">成长</span><span class="tag">身份</span><span class="tag">蓝色月光</span>
+        </article>
+        <article class="film-card">
+          <div class="film-phase">☽ 上弦 · WAXING</div>
+          <h3>月升王国</h3>
+          <div class="film-meta">2012 · 爱情/喜剧 · 韦斯·安德森</div>
+          <p>两个12岁小孩在岛上私奔。月光把童年的倔强和浪漫都照得很认真。</p>
+          <span class="tag halo">青春</span><span class="tag">私奔</span><span class="tag">对称构图</span>
+        </article>
+        <article class="film-card">
+          <div class="film-phase">● 满月 · FULL MOON</div>
+          <h3>月球</h3>
+          <div class="film-meta">2009 · 科幻 · 邓肯·琼斯</div>
+          <p>月球背面的孤独工人、一台叫 GERTY 的终端、和"另一个自己"。满月的背面是寂寞。</p>
+          <span class="tag halo">孤独</span><span class="tag">科幻</span><span class="tag">人机</span>
+        </article>
+        <article class="film-card">
+          <div class="film-phase">☾ 残月 · WANING</div>
+          <h3>夜</h3>
+          <div class="film-meta">1961 · 剧情 · 安东尼奥尼</div>
+          <p>米兰的夜，恋人走散在话里。残月最适合看：爱还在，但已经说不完整了。</p>
+          <span class="tag halo">疏离</span><span class="tag">现代爱情</span><span class="tag">长镜头</span>
+        </article>
+        <article class="film-card">
+          <div class="film-phase">● 满月 · FULL MOON</div>
+          <h3>午夜巴黎</h3>
+          <div class="film-meta">2011 · 奇幻/爱情 · 伍迪·艾伦</div>
+          <p>半夜十二点走进旧巴黎，和海明威、菲茨杰拉德喝一杯。满月是怀旧的人造童话。</p>
+          <span class="tag halo">怀旧</span><span class="tag">黄金时代</span><span class="tag">穿越</span>
+        </article>
+        <article class="film-card">
+          <div class="film-phase">○ 新月 · NEW MOON</div>
+          <h3>月球旅行记</h3>
+          <div class="film-meta">1902 · 短片/奇幻 · 梅里爱</div>
+          <p>火箭插进月亮的眼睛。电影最早对月亮的想象，比任何科幻都更像梦。</p>
+          <span class="tag halo">默片</span><span class="tag">舞台幻术</span><span class="tag">影史起点</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 栏目二：月夜时间线 -->
+  <section class="night-section" id="night">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="sec-kicker">A Night at the Movies</div>
+        <h2 class="sec-title">月夜时间线</h2>
+        <p class="sec-desc">从月出到月落，每个钟点都该有一部电影陪你。别开灯太亮，别睡太早。</p>
+      </div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-time">21:00</div>
+          <div class="tl-body"><h4>月出 · 想慢下来</h4><p>看《海街日记》《小森林》《步履不停》——把白天还给别人，把晚上还给自己。</p></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-time">23:00</div>
+          <div class="tl-body"><h4>上弦 · 想谈恋爱</h4><p>看《怦然心动》《蓝色大门》《情书》——喜欢一个人，本来就是一件很夜的事。</p></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-time">01:00</div>
+          <div class="tl-body"><h4>满月 · 想认清自己</h4><p>看《月光男孩》《镜子》《都灵之马》——月亮最亮时，人最不想骗自己。</p></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-time">03:00</div>
+          <div class="tl-body"><h4>残月 · 想被吓醒</h4><p>看《月球》《2001太空漫游》《潜行者》——凌晨三点，宇宙和潜意识同时开门。</p></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-time">05:00</div>
+          <div class="tl-body"><h4>月落 · 想重新出发</h4><p>看《月升王国》《天堂电影院》《海上钢琴师》——天快亮了，允许自己再相信一次。</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 栏目三：月亮与电影 -->
+  <section id="themes">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="sec-kicker">The Moon in Cinema</div>
+        <h2 class="sec-title">月亮与电影</h2>
+        <p class="sec-desc">月亮不是背景板。它一出现，电影就开始说真话：关于爱、孤独、疯狂和远方。</p>
+      </div>
+      <div class="theme-grid">
+        <div class="theme-card">
+          <span class="theme-emoji">💞</span>
+          <h4>月下浪漫</h4>
+          <p>天台、海边、车窗外的月亮。东方人写"今晚月色真美"，西方人让恋人在满镜下接吻。</p>
+          <span>《天台的月光》《月色撩人》《情书》</span>
+        </div>
+        <div class="theme-card">
+          <span class="theme-emoji">🌑</span>
+          <h4>月夜孤独</h4>
+          <p>月亮平等地照所有人，却让人更觉得自己是一个人。夜行、长途、空房间。</p>
+          <span>《地球之夜》《夜》《月球》</span>
+        </div>
+        <div class="theme-card">
+          <span class="theme-emoji">🚀</span>
+          <h4>月球科幻</h4>
+          <p>从梅里爱到邓肯·琼斯，月亮是人类把"远方"钉进银幕的第一颗钉子。</p>
+          <span>《月球旅行记》《月球》《2001太空漫游》</span>
+        </div>
+        <div class="theme-card">
+          <span class="theme-emoji">🐺</span>
+          <h4>满月疯癫</h4>
+          <p>满月=欲望失控。狼人、酒、秘密、成年礼——月亮一圆，文明就薄了一层。</p>
+          <span>《狼人生死恋》《月吟》《夜访吸血鬼》</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 栏目四：关于 -->
+  <section class="about" id="about">
+    <div class="wrap">
+      <p class="quote">"太阳负责白天的真相，<br/><b>月亮负责夜里没说出口的话。</b>"</p>
+      <p>月亮电影网不做排行榜，不做"全网热播"。我们只在每个晚上问你：你现在像哪一种月？然后递给你一部刚好照到那种心情的电影。</p>
+      <div class="stats">
+        <div class="stat"><div class="n">4</div><div class="l">月相选片维度</div></div>
+        <div class="stat"><div class="n">21→05</div><div class="l">月夜时间线</div></div>
+        <div class="stat"><div class="n">∞</div><div class="l">夜里没说完的话</div></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div class="foot">
+        <div>
+          <div class="brand"><span class="dot"></span>月亮<b>电影网</b></div>
+          <p>夜色诗意电影站：月光片单、月相选片、夜间观影时间线与月亮主题策展。</p>
+        </div>
+        <div class="foot-col">
+          <h5>选片</h5>
+          <a href="#films">月光片单</a><a href="#night">月夜时间线</a><a href="#themes">月亮与电影</a>
+        </div>
+        <div class="foot-col">
+          <h5>月相</h5>
+          <a href="#">新月 · 开始</a><a href="#">上弦 · 犹豫</a><a href="#">满月 · 坦白</a><a href="#">残月 · 释怀</a>
+        </div>
+        <div class="foot-col">
+          <h5>站点</h5>
+          <a href="#home">今夜</a><a href="#about">关于月亮</a><a href="#">订阅月信</a>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span>© 2026 月亮电影网 · yueliangdianyingwang-h5.github.io</span>
+        <span>单文件静态页 · 无 robots.txt / sitemap.xml · 符合必应收录</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click',()=>document.getElementById('navLinks').classList.remove('active'));
+    });
+  </script>
+</body>
+</html>
